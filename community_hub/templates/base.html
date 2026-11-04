@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Community Hub{% endblock %} · Community Hub</title>
+<meta name="theme-color" content="#17283e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Community Hub">
+<link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><header class="header"><div class="header-inner"><a class="brand" href="{{ url_for('issues') }}"><span class="brand-mark">✳</span> Community<span class="brand-accent">Hub</span></a>
+{% if g.user %}<nav aria-label="Main navigation"><a href="{{ url_for('issues') }}" class="{% if request.endpoint == 'issues' %}active{% endif %}">Issues</a><a href="{{ url_for('tasks') }}" class="{% if request.endpoint == 'tasks' %}active{% endif %}">Tasks</a><a href="{{ url_for('members') }}" class="{% if request.endpoint == 'members' %}active{% endif %}">Members</a><a href="{{ url_for('chat') }}" class="{% if request.endpoint == 'chat' %}active{% endif %}">Chat</a></nav><div class="user-area"><span class="signed-in">Hi, {{ g.user['name'] }}</span><form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="logout" type="submit">Log out</button></form></div>{% else %}<div class="user-area"><a href="{{ url_for('login') }}">Log in</a><a class="btn btn-small" href="{{ url_for('register') }}">Join now</a></div>{% endif %}
+</div></header><main class="container">{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="alerts">{% for category,message in messages %}<div class="alert alert-{{ category }}" role="status">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}{% block content %}{% endblock %}</main><footer>Community Hub · A space to stay connected · {{ current_year }}</footer>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(console.warn));
+}
+</script></body></html>
